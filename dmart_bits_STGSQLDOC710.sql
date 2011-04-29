@@ -13,29 +13,30 @@ ORDER BY Beta,2
 
 --UPDATE ClientConnection
 --SET Beta = '0'
---where Client_id IN ('232', '1031', '309', '10062', '1023', '1031') -- Addison,Boeing,Chevron,Ent,PADemoDU
---WHERE SourceDB = 'CUWest'
+--where Client_id IN ('1031') -- PADemoDU
+--WHERE SourceDB = 'Thrivent'
 -------------------------------------------
 --UPDATE ClientConnection
 --SET Beta = '1'
---WHERE SourceDB IN ('AddisonAve32','Chevron','EDCO','ConstructionLoanCompany','Delta','Dupont','Kern32','MembersMortgage','Suncoast32','Wescom')
+--WHERE SourceDB IN ('AddisonAve32','Chevron','Boeing4','Ent','GeorgiaTelco','HiwayCU','PADemoDU')
 --WHERE Client_ID <= 1025 -- Hutchinson, number 30 when sorted by client_id
 
 --UPDATE ClientConnection
 --SET Beta = '0'
 --WHERE Client_ID = '9999999' --> 1025
 -------------------------------------------
---DECLARE @1DayAgo datetime
---SET @1DayAgo = GetDate() - 2 
+/*
+DECLARE @1DayAgo datetime
+SET @1DayAgo = GetDate() - 2 
 
---UPDATE ClientConnection
---SET LoadStageDBStartDate = @1DayAgo
---,LoadStageDBEndDate = @1DayAgo
---,LoadReportDBStartDate = @1DayAgo
---,LoadReportDBEndDate = @1DayAgo
---,Status = 4
---WHERE Beta='1'
---WHERE SourceDB = 'MembersMortgage'
+UPDATE ClientConnection
+SET LoadStageDBStartDate = @1DayAgo
+,LoadStageDBEndDate = @1DayAgo
+,LoadReportDBStartDate = @1DayAgo
+,LoadReportDBEndDate = @1DayAgo
+,Status = 4
+WHERE Beta='1'
+*/
 ----------------------------------------------
 /*
 TRUNCATE TABLE DMartLogging
@@ -54,12 +55,13 @@ WHERE Name LIKE '%Data%'
 EXEC sel_dmart_clients @Beta = '1'
 ----------------------------------------------
 SELECT * FROM opsinfo.ops.dbo.clients
-WHERE client_name IN ('CUWest')
+WHERE client_name IN ('thrivent')
 ----------------------------------------------
-ins_ClientConnection @Client_id = '297'
+ins_ClientConnection @Client_id = '10073'
 					, @SourceServer = 'STGSQL610'
-					, @SourceDB = 'CUWest'
+					, @SourceDB = 'Thrivent'
 
+dbamaint.dbo.dbm_DMartDRRecovery 'Thrivent'
 --client_id	client_name	client_pa
 --1013	GeorgiaTelco	1
 --10069	CommunityFirstCU	1
@@ -79,9 +81,6 @@ ins_ClientConnection @Client_id = '297'
 --ins_ClientConnection '10028','STGSQL511','DenverPublicSchools'
 ----------------------------------------------
 /*
-DECLARE @NOW datetime 
-SET @NOW = GetDate()
-
 UPDATE ClientConnection
 SET LoadStageDBStartDate = '2010-03-09 01:10:33.200'
 ,LoadStageDBEndDate = '2010-03-09 01:15:20.393'
@@ -155,35 +154,10 @@ ORDER BY Beta,3 --DESC
 --WHERE Beta='0'
 ----------------------------------------------------------------
 
-
---UPDATE ClientConnection
---SET Status = '2' 
---WHERE Beta = '1' 
-
-
---DECLARE @Now datetime
---SET @Now = GetDate() 
-
---UPDATE ClientConnection
---SET LoadStageDBStartDate = @Now ,LoadStageDBEndDate = @Now ,Status = 2
---WHERE Beta='1'	
-
---UPDATE ClientConnection
---SET ReportServer = 'STGSQLDOC710'
---WHERE ReportServer = 'PSQLRPT10'
-
---UPDATE ClientConnection
---SET StageServer = 'STGSQLDOC710'
---WHERE StageServer = 'PSQLRPT10'
-
---UPDATE ClientConnection
---SET SourceServer = 'STGSQL610'
-
-
 ---------------------------------------------
-update clientconnection set StageServer = 'STGSQLDOC710', ReportServer = 'STGSQLDOC710', SourceServer = 'STGSQL511'
+--update clientconnection set StageServer = 'STGSQLDOC710', ReportServer = 'STGSQLDOC710', SourceServer = 'STGSQL511'
 --where SourceDB IN ('AddisonAve32','Chevron','EDCO','ConstructionLoanCompany','Delta','Dupont','Kern32','MembersMortgage','Suncoast32','Wescom')
-WHERE Beta = '0'
+--WHERE Beta = '0'
 
 --UPDATE ClientConnection
 --SET LoadStageDBStartDate = '2010-03-09 01:10:33.200'
@@ -191,13 +165,6 @@ WHERE Beta = '0'
 --,LoadReportDBStartDate = '2010-03-09 02:55:12.807'
 --,LoadReportDBEndDate = '2010-03-09 02:59:33.627'
 --where Beta = '0'
-
-
-
---UPDATE ClientConnection
---SET StageServer = 'STGSQLDOC710', ReportServer = 'PSQLRPT22', Beta = '0'
---WHERE SourceDB = 'RLC'
-
 
 
 --UPDATE ClientConnection
@@ -214,32 +181,3 @@ WHERE Beta = '0'
 --SET Client_ID = '228'
 --WHERE SourceDB = 'Boeing4'
 
-/*
-
-UPDATE ClientConnection
-SET Beta = 2
-WHERE SourceDB IN ('AddisonAve32','Boeing4','Ent','PADemoDU')
-WHERE SourceDB IN ('Baxter')
-*/
-
---UPDATE ClientConnection
---SET LoadStageDBStartDate = GetDate()
---,LoadStageDBEndDate = GetDate()
---,LoadReportDBStartDate = GetDate()
---,LoadReportDBEndDate = GetDate()
---WHERE Beta = '1'
---------------------------------------------
---UPDATE ClientConnection
---SET LoadStageDBStartDate = GetDate() - 2
---,LoadStageDBEndDate = GetDate() - 2
---,LoadReportDBStartDate = GetDate() - 2
---,LoadReportDBEndDate = GetDate() - 2
---WHERE SourceDB IN ('Boeing4','Ent','GTE32')
-
-
---UPDATE ClientConnection
---SET LoadStageDBStartDate = GetDate() - 2
---,LoadStageDBEndDate = GetDate() - 2
---,LoadReportDBStartDate = GetDate() - 2
---,LoadReportDBEndDate = GetDate() - 2
---WHERE SourceDB IN ('MissionFed40','Bellco32')

@@ -1,29 +1,20 @@
 USE PA_DMart
 GO
 SELECT  --SourceServer,
-		Client_ID, SourceDB, 
+		Client_ID, SourceDB, [Status], Beta,
 		LoadStageDBStartDate, LoadStageDBEndDate,
 		DATEDIFF(minute,LoadStageDBStartDate, LoadStageDBEndDate) AS StageLoadTime,
 		LoadReportDBStartDate, LoadReportDBEndDate,
-		DATEDIFF(minute,LoadReportDBStartDate, LoadReportDBEndDate) AS ReportLoadTime,
-		[Status], Beta
+		DATEDIFF(minute,LoadReportDBStartDate, LoadReportDBEndDate) AS ReportLoadTime
 FROM ClientConnection
-WHERE Beta != '2'
-ORDER BY Beta,2
+--WHERE Beta != '2'
+--WHERE SourceDB = 'MembersMortgage'
+ORDER BY Beta, 2
 
 --UPDATE ClientConnection
 --SET Beta = '0'
 --where Client_id = '141'
 --WHERE SourceDB = 'PADemoDU'
--------------------------------------------
---UPDATE ClientConnection
---SET Beta = '1'
---WHERE SourceDB IN ('PADemoDU','RLC','TIB','Boeing4')
---WHERE Client_ID <= 1025 -- Hutchinson, number 30 when sorted by client_id
-
---UPDATE ClientConnection
---SET Beta = '0'
---WHERE Client_ID = '10024'
 -------------------------------------------
 --DECLARE @1DayAgo datetime
 --SET @1DayAgo = GetDate() - 2 

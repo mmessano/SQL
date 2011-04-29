@@ -8,14 +8,12 @@ SELECT  --SourceServer,
 		DATEDIFF(minute,LoadReportDBStartDate, LoadReportDBEndDate) AS ReportLoadTime
 FROM ClientConnection
 --WHERE Beta != '2'
---WHERE Beta = '1'
+WHERE Beta = '1'
 ORDER BY Beta,2
-
 
 --UPDATE ClientConnection
 --SET Beta = '1'
---where Client_id = '10069'
---WHERE SourceDB IN ('AmericaFirst32')
+--WHERE SourceDB IN ('PADemoDU','RLC')
 -------------------------------------------
 --UPDATE ClientConnection
 --SET Beta = '0'
@@ -23,8 +21,8 @@ ORDER BY Beta,2
 --WHERE Client_ID <= 1025 -- Hutchinson, number 30 when sorted by client_id
 
 --UPDATE ClientConnection
---SET Beta = '0'
---WHERE Client_ID IN ( '10024', '1031' )--> 1025
+--SET Beta = '1'
+--WHERE Client_ID IN ( '136')
 -------------------------------------------
 --DECLARE @1DayAgo datetime
 --SET @1DayAgo = GetDate() - 2 
@@ -53,9 +51,13 @@ WHERE Name LIKE '%Data%'
 EXEC sel_dmart_clients @Beta = '1'
 ----------------------------------------------
 SELECT * FROM opsinfo.ops.dbo.clients
-WHERE client_name LIKE '%America%'
+WHERE client_name LIKE '%HiwayCU%'
 ----------------------------------------------
-ins_ClientConnection @Client_id = '189', @SourceServer = 'PSQLDLS31', @SourceDB = 'AmericaFirst32'
+ins_ClientConnection @Client_id = '10073'
+					, @SourceServer = 'PSQLDLS33'
+					, @SourceDB = 'Thrivent'
+					
+dbamaint.dbo.dbm_DMartDRRecovery 'Thrivent'
 ----------------------------------------------
 exec sel_DMART_Failure
 --@Client_id				int,
@@ -158,8 +160,8 @@ ORDER BY Beta,3 --DESC
 --WHERE SourceDB = 'Redwood'
 
 --UPDATE ClientConnection
---SET SourceServer = 'STGSQL610'
---WHERE SourceDB = 'GeorgiaTelco'
+--SET SourceServer = 'PSQLDLS30'
+--WHERE SourceDB = 'HiwayCU'
 
 
 --UPDATE ClientConnection
@@ -184,4 +186,5 @@ ORDER BY Beta,3 --DESC
 --,LoadReportDBEndDate = GetDate()
 --WHERE Beta = '1'
 
-
+DELETE FROM ClientConnection
+WHERE SourceDB = 'MidwestFinancial'
