@@ -16,8 +16,8 @@ where pdlastupdate = '2011-04-24 19:21:00'
 
 --5849	2533	4	Migrated to Prod.	30	0	2010-11-15 20:43:00
 update [Status].[dbo].[ProjectDetail]
-SET HoursWorked = '5', MinutesWorked = '30'
-WHERE PDID = '8357' AND PSID = '1771'
+SET HoursWorked = '2', MinutesWorked = '0'
+WHERE PDID = '8670' AND PSID = '1729'
 
 SELECT [PSID]
       ,[TechID]

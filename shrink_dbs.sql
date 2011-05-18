@@ -24,7 +24,7 @@ Declare @dblog varchar(128)
 Declare @dbdata varchar(128)
 Declare @cmd varchar(256)
 
-Set @db = 'AmericanAirlines'
+Set @db = 'Status'
 Set @dblog = @db + '_Log'
 Set @dbdata = @db + '_Data'
 
@@ -40,7 +40,7 @@ DBCC shrinkfile(CUWest_Log,TruncateOnly)
 DBCC SHRINKDATABASE(dexmasites,TruncateOnly)
 
 ----------------------------------------------------
-dbcc shrinkfile('AmericanAirlines_Log',TruncateOnly)
+dbcc shrinkfile('Status_Data',TruncateOnly)
 dbcc shrinkfile('RightFax',TruncateOnly)
 dbcc shrinkfile('RightFax',200)
 dbcc shrinkfile('AmericanAirlines_Data',5)

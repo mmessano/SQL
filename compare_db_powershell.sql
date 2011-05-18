@@ -64,13 +64,17 @@ SELECT @cmd3 = 'C:\Dexma\powershell_bits\Compare-DMartSchema2.ps1 -SqlServerOne 
 PRINT (@cmd2)
 PRINT (@cmd3)
 ------------------------------------------------------------------------------------------------------------------------
+-- XSQLUTIL18.dbo.Status
+USE Status
+GO
+
 DECLARE @ServerList NVARCHAR(MAX)
 DECLARE @cmd NVARCHAR(MAX)
 
 SELECT @ServerList = COALESCE(@ServerList + ', ', '') + RTRIM(LTRIM([server_name]))
 FROM Status.dbo.t_server s
 	INNER JOIN [t_server_type_assoc] sta		on s.server_id = sta.server_id 
-	INNER JOIN [t_server_type] st			on sta.type_id = st.type_id 
+	INNER JOIN [t_server_type] st			on sta.type_id = sT.type_id 
 	INNER JOIN [t_environment] e			on s.environment_id = e.environment_id 
 	INNER JOIN [t_monitoring] m			on s.server_id = m.server_id 
 where type_name = 'DB' AND active = 1
@@ -85,37 +89,37 @@ SELECT @cmd =	'C:\Dexma\powershell_bits\Compare-DbamaintSchema.ps1 ' +
 PRINT (@cmd)				
 ------------------------------------------------------------------------------------------------------------------------
 -- XSQLUTIL18.Status
-USE Status
-GO
+--USE Status
+--GO
 
-DECLARE @Server VARCHAR(128)
-DECLARE @cmd VARCHAR(MAX)
+--DECLARE @Server VARCHAR(128)
+--DECLARE @cmd VARCHAR(MAX)
 
-DECLARE dbamaintdbs CURSOR FOR
-	SELECT distinct RTRIM(LTRIM([server_name])) AS ServerName
-		FROM [t_server] s 
-		INNER JOIN [t_server_type_assoc] sta		on s.server_id = sta.server_id 
-		INNER JOIN [t_server_type] st			on sta.type_id = st.type_id 
-		INNER JOIN [t_environment] e			on s.environment_id = e.environment_id 
-		INNER JOIN [t_monitoring] m			on s.server_id = m.server_id 
-		where type_name = 'DB' AND active = 1
-	ORDER BY 1
+--DECLARE dbamaintdbs CURSOR FOR
+--	SELECT distinct RTRIM(LTRIM([server_name])) AS ServerName
+--		FROM [t_server] s 
+--		INNER JOIN [t_server_type_assoc] sta		on s.server_id = sta.server_id 
+--		INNER JOIN [t_server_type] st			on sta.type_id = sT.type_id 
+--		INNER JOIN [t_environment] e			on s.environment_id = e.environment_id 
+--		INNER JOIN [t_monitoring] m			on s.server_id = m.server_id 
+--		where type_name = 'DB' AND active = 1
+--	ORDER BY 1
 	
-OPEN dbamaintdbs
-FETCH NEXT FROM dbamaintdbs INTO @Server
-WHILE @@fetch_status = 0 
+--OPEN dbamaintdbs
+--FETCH NEXT FROM dbamaintdbs INTO @Server
+--WHILE @@fetch_status = 0 
 
-BEGIN
+--BEGIN
 
---SELECT @cmd = 'C:\Dexma\powershell_bits\Compare-DMartSchema.ps1 -SqlServerOne XSQLUTIL18 -FirstDatabase dbamaint -SqlServerTwo ' + @Server + ' -SecondDatabase dbamaint -Column -Log'
-SELECT @cmd = 'dbm_CompareDB @db1 = ''dbamaint'', @db2 = ''' + @Server + '.dbamaint'', @NumbToShow = ''100'', @OnlyStructure = ''1'', @NoTimeStamp = ''1'', @VerboseLevel = ''1'''
-PRINT (@cmd)
+----SELECT @cmd = 'C:\Dexma\powershell_bits\Compare-DMartSchema.ps1 -SqlServerOne XSQLUTIL18 -FirstDatabase dbamaint -SqlServerTwo ' + @Server + ' -SecondDatabase dbamaint -Column -Log'
+--SELECT @cmd = 'dbm_CompareDB @db1 = ''dbamaint'', @db2 = ''' + @Server + '.dbamaint'', @NumbToShow = ''100'', @OnlyStructure = ''1'', @NoTimeStamp = ''1'', @VerboseLevel = ''1'''
+--PRINT (@cmd)
 
-FETCH NEXT FROM dbamaintdbs INTO @Server
-END
+--FETCH NEXT FROM dbamaintdbs INTO @Server
+--END
  
-CLOSE dbamaintdbs
-DEALLOCATE dbamaintdbs
+--CLOSE dbamaintdbs
+--DEALLOCATE dbamaintdbs
 ------------------------------------------------------------------------------------------------------------------------
 -- PSQLSMC30
 DECLARE @dblistStage NVARCHAR(MAX)
@@ -146,3 +150,4 @@ SELECT @cmd3 = 'C:\Dexma\powershell_bits\Compare-DMartSchema2.ps1 -SqlServerOne 
 
 PRINT (@cmd2)
 PRINT (@cmd3)
+

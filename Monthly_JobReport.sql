@@ -11,8 +11,13 @@ By:
 Note: 
 =========================================================================*/
 
-create proc sp_monthly_jobreport ( @year int , @month tinyint ) 
-as
+--create proc sp_monthly_jobreport ( @year int , @month tinyint )
+--as
+DECLARE @Year int,
+		@Month tinyint
+
+SET @Year = '2011'
+SET @Month = '4'
 
 	select  j.name as [JobName], substring( convert(varchar, run_date )  , 7, 2) as  [Day] ,
 	max( case run_status  when 1 then 'S' when 0 then 'F' when 2 then 'R' when 3 then 'C' else 'P' end  ) as [Status]

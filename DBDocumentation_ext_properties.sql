@@ -1,4 +1,5 @@
---Once again, the code is easily extended (based on the snippets already given in this series of articles plus your own additions), should you wish to add further objects from amongst those which can be documented.
+--Once again, the code is easily extended (based on the snippets already given in this series of articles plus your own additions)
+--should you wish to add further objects from amongst those which can be documented.
 -----------------------------------------------------------------------
 -- User-defined variables
 -- Set these to 1 or 0 to indicate whether you wish to output the elements
@@ -8,7 +9,7 @@ DECLARE @OutputViews BIT
 DECLARE @OutputProcedures BIT 
 DECLARE @OutputFunctions BIT 
 DECLARE @OutputTableColumns BIT 
-DECLARE @OutputViewColumns BIT 
+DECLARE @OutputViewColumns BIT
 DECLARE @OutputIndexes BIT 
 DECLARE @OutputConstraints BIT 
 SET @OutputTables = 1

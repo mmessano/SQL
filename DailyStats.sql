@@ -7,7 +7,7 @@ Statistic of SQL-Server - System parameters for dynamic collection.
 @@idle/1000     - Returns the time in seconds that SQL Server has been idle since last started.
 @@pack_received - Returns the number of input packets read from the network by SQL Server since last started.
 @@pack_sent     - Returns the number of output packets written to the network by SQL Server since last started.
-@@packet_errors - Returns the number of network packet errors that have occurred on 
+@@packet_errors - Returns the number of network packet errors that have occurred on
                   SQL Server connections since SQL Server was last started.
 @@connections   - Returns the number of connections, or attempted connections, since SQL Server was last started.
 @@total_read    - Returns the number of disk reads (not cache reads) by SQL Server since last started.
@@ -27,31 +27,31 @@ Author  - Mushkatin Vadim,DBA,Israel.
 Created - 09/03/2003. 
 */
 
-IF EXISTS (SELECT * FROM sysobjects WHERE type = 'P' AND name = 'sp_ServerStats_Daily')
-   DROP  Procedure  sp_ServerStats_Daily
+IF EXISTS (SELECT * FROM sysobjects WHERE type = 'P' AND name = 'dbm_ServerStatsDaily')
+   DROP  Procedure  dbm_ServerStatsDaily
 GO
 
-Create PROCEDURE sp_ServerStats_Daily  ( @BIT_DELETE_RESULTS BIT = 0 )
+Create PROCEDURE dbm_ServerStatsDaily  ( @BIT_DELETE_RESULTS BIT = 0 )
 AS
 
 SET NOCOUNT ON
 
-Declare @weekday 			INT	,
-        @count 				INT        ,
-        @sql_started 			datetime
+Declare @weekday 			INT
+		, @count 		INT
+		, @sql_started		datetime
 
-Declare @id_prior 			INT        ,
-        @sampletime_prior 		datetime   ,
-        @cpu_busy_prior 		INT        ,
-        @io_busy_prior 			INT        ,
-        @idle_prior 			INT        ,
-        @pack_received_prior 		INT        ,
-        @pack_send_prior 		INT        ,
-        @packed_errors_prior 		INT        ,
-        @connections_prior 		INT        ,
-        @total_read_prior 		INT        ,
-        @total_write_prior 		INT        ,
-        @total_errors_prior 		INT
+Declare @id_prior 			INT
+	, @sampletime_prior		datetime
+	, @cpu_busy_prior 		INT
+        , @io_busy_prior 		INT
+        , @idle_prior 			INT
+        , @pack_received_prior 		INT
+        , @pack_send_prior 		INT
+        , @packed_errors_prior 		INT
+        , @connections_prior 		INT
+        , @total_read_prior 		INT
+        , @total_write_prior 		INT
+        , @total_errors_prior 		INT
 
 ------------------------------------------ 
 Set @sql_started   = ( select login_time  from master..sysprocesses where spid = 1 )

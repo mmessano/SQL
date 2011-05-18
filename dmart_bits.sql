@@ -8,12 +8,12 @@ SELECT  --SourceServer,
 		DATEDIFF(minute,LoadReportDBStartDate, LoadReportDBEndDate) AS ReportLoadTime
 FROM ClientConnection
 --WHERE Beta != '2'
-WHERE Beta = '1'
+--WHERE Beta = '1'
 ORDER BY Beta,2
 
 --UPDATE ClientConnection
 --SET Beta = '1'
---WHERE SourceDB IN ('PADemoDU','RLC')
+--WHERE SourceDB IN ('PADemoDU','RLC','TIB')
 -------------------------------------------
 --UPDATE ClientConnection
 --SET Beta = '0'
