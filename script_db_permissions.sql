@@ -27,7 +27,8 @@ DECLARE @bcp varchar(8000)
 set @server_name = cast(serverproperty('servername') as varchar(255))
 --server name won't work on MSDE version of sql replace with @@SERVERNAME
 --set @path = '\\messano338\inbox\SQLPerms\ select @user = loginame from master.dbo.sysprocesses where spid = @@SPID'
-set @path = '\\messano338\inbox\SQLPerms\'
+-- local to the remote server
+set @path = 'E:\dexma\logs\'
 --path to save to UNC works just fine must have trailing select @user = loginame from master.dbo.sysprocesses where spid = @@SPID
 --pulls the login name of the current user to fill out some of the self documentation
 

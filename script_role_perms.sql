@@ -9,7 +9,7 @@
 
 DECLARE @DatabaseRoleName [sysname]
 --SET @DatabaseRoleName = '{Database Role Name}'
-SET @DatabaseRoleName = 'Database Role Nam'
+SET @DatabaseRoleName = 'ProdOpsMonitor'
 
 SET NOCOUNT ON
 DECLARE

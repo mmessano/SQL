@@ -28,7 +28,6 @@ WITH perms_cte as
 	on
 	p.grantee_principal_id = dp.principal_id
 )
-
 --users
 SELECT p.principal_name,  p.principal_type_desc, p.class_desc, p.[object_name], p.permission_name, p.permission_state_desc, cast(NULL as sysname) as role_name
 FROM    perms_cte p
@@ -46,3 +45,4 @@ right outer JOIN (
 ON
 rm.role_principal_id = p.principal_id
 order by 1
+

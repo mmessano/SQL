@@ -3,36 +3,53 @@ GO
 SELECT  --SourceServer,
 		Client_ID, SourceDB, [Status], Beta,
 		LoadStageDBStartDate, LoadStageDBEndDate,
-		DATEDIFF(minute,LoadStageDBStartDate, LoadStageDBEndDate) AS StageLoadTime,
+		CONVERT(varchar(12), DATEADD(ms, DATEDIFF(ms, LoadStageDBStartDate, LoadStageDBEndDate), 0), 114) AS StageLoadTime,
 		LoadReportDBStartDate, LoadReportDBEndDate,
-		DATEDIFF(minute,LoadReportDBStartDate, LoadReportDBEndDate) AS ReportLoadTime
+		CONVERT(varchar(12), DATEADD(ms, DATEDIFF(ms, LoadReportDBStartDate, LoadReportDBEndDate), 0), 114) AS ReportLoadTime
 FROM ClientConnection
 --WHERE Beta != '2'
---WHERE SourceDB = 'MembersMortgage'
-ORDER BY Beta, 2
+--WHERE Beta = '1'
+ORDER BY Beta,2
+
 
 --UPDATE ClientConnection
---SET Beta = '0'
+--SET Beta = '1'
 --where Client_id = '141'
---WHERE SourceDB = 'PADemoDU'
+--WHERE SourceDB = 'RLC'
 -------------------------------------------
---DECLARE @1DayAgo datetime
---SET @1DayAgo = GetDate() - 2 
+/*
+DECLARE @1DayAgo datetime
+SET @1DayAgo = GetDate() - 2 
 
---UPDATE ClientConnection
---SET LoadStageDBStartDate = @1DayAgo
---,LoadStageDBEndDate = @1DayAgo
---,LoadReportDBStartDate = @1DayAgo
---,LoadReportDBEndDate = @1DayAgo
---,Status = 4
---WHERE Beta='1'
---WHERE SourceDB = 'MembersMortgage'
+UPDATE ClientConnection
+SET LoadStageDBStartDate = @1DayAgo
+,LoadStageDBEndDate = @1DayAgo
+,LoadReportDBStartDate = @1DayAgo
+,LoadReportDBEndDate = @1DayAgo
+,Status = 4
+WHERE Beta='1'
+WHERE SourceDB = 'MembersMortgage'
+*/
 ----------------------------------------------
 /*
 TRUNCATE TABLE DMartLogging
 */
 SELECT * FROM DMartLogging
 ORDER BY ErrorDateTime desc
+----------------------------------------------
+SELECT * FROM DMartLogging
+WHERE DATEPART(day,ErrorDateTime) = DATEPART(day,GetDate())
+AND DATEPART(month,ErrorDateTime) = DATEPART(month,GetDate())
+AND DATEPART(year,ErrorDateTime) = DATEPART(year,GetDate())
+ORDER BY ErrorDateTime DESC
+----------------------------------------------
+SELECT * FROM dbo.DMartComponentLogging
+WHERE DATEPART(day,ErrorDateTime) = DATEPART(day,GetDate())
+AND DATEPART(month,ErrorDateTime) = DATEPART(month,GetDate())
+AND DATEPART(year,ErrorDateTime) = DATEPART(year,GetDate())
+AND TaskName = 'Data Flow Task br_liability'
+GROUP BY TaskName, ErrorDateTime, PackageName, DestDB, DestServer, SourceDB, SourceServer, ID, ClientId, ErrorMessage
+ORDER BY ErrorDateTime ASC
 ----------------------------------------------
 SELECT name from sys.databases
 WHERE Name LIKE '%Stage%'
@@ -60,7 +77,7 @@ SET LoadStageDBStartDate = '2010-03-09 01:10:33.200'
 ,LoadReportDBStartDate = '2010-03-09 02:55:12.807'
 ,LoadReportDBEndDate = '2010-03-09 02:59:33.627'
 ,Status = 4
-where client_id = '266'
+--where client_id = '266'
 WHERE Beta='1'
 */
 
@@ -118,13 +135,6 @@ SET LoadStageDBStartDate = @1DayAgo
 WHERE Beta='1'
 */
 ----------------------------------------------------------------
-
-
---UPDATE ClientConnection
---SET Status = '2' 
---WHERE Beta = '1' 
-
-
 --DECLARE @Now datetime
 --SET @Now = GetDate() 
 
@@ -135,16 +145,7 @@ WHERE Beta='1'
 --UPDATE ClientConnection
 --SET ReportServer = 'PSQLRPT22'
 --WHERE ReportServer = 'PSLQRPT22'
-
 ---------------------------------------------
-update clientconnection 
-	SET StageServer = 'IAPPBO510'
-	,SourceServer = 'IAPPBO510'
-	,ReportServer = 'IAPPBO510'
-
-
-ins_clientconnection '999999', 'IAPPBO510', 'Template'
-
 --UPDATE ClientConnection
 --SET LoadStageDBStartDate = '2010-03-09 01:10:33.200'
 --,LoadStageDBEndDate = '2010-03-09 01:15:20.393'
@@ -152,13 +153,9 @@ ins_clientconnection '999999', 'IAPPBO510', 'Template'
 --,LoadReportDBEndDate = '2010-03-09 02:59:33.627'
 --where Beta = '0'
 
-
-
 --UPDATE ClientConnection
 --SET StageServer = 'PSQLRPT22', ReportServer = 'PSQLRPT22', Beta = '0'
 --WHERE SourceDB = 'Boeing4'
-
-
 
 --UPDATE ClientConnection
 --SET LoadStageDBStartDate = '2010-03-09 01:10:33.200'
@@ -169,5 +166,7 @@ ins_clientconnection '999999', 'IAPPBO510', 'Template'
 --where Beta = '0'
 
 
-DELETE FROM ClientConnection
-WHERE SourceDB NOT IN ('RLC','PADemoDU')
+
+SELECT * FROM DMartLogging
+WHERE TaskName = 'Data Flow Task br_REO'
+ORDER BY ErrorDateTime desc

@@ -24,8 +24,8 @@ SET NOCOUNT ON
 DECLARE @Now CHAR(14)		-- current date in the form of yyyymmddhhmmss
 DECLARE @DBName SYSNAME		-- stores the database name that is currently being processed
 DECLARE @cmd SYSNAME		-- stores the dynamically created DOS command
-DECLARE @Result INT		-- stores the result of the dir DOS command
-DECLARE @RowCnt INT		-- stores @@ROWCOUNT
+DECLARE @Result INT			-- stores the result of the dir DOS command
+DECLARE @RowCnt INT			-- stores @@ROWCOUNT
 DECLARE @disk VARCHAR(200)	-- stores the path and file name of the TRN file
 
 CREATE TABLE #WhichDatabase

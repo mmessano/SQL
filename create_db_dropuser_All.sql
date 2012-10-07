@@ -8,23 +8,34 @@ select * from sqldbusers
 	--AND DatabaseUserID = 'HOME_OFFICE\Service Specialist'
 	--AND servername = 'Folsom'
 ORDER BY 3,1,2
+
+USE dbamaint
+GO
+
+EXEC dbm_PermissionsAll;
 */
 --------------------------------------------------------------
+USE dbamaint
+GO
+
 Declare @dbname varchar(32)
 Declare @ServerName varchar(128)
+Declare @User varchar(128)
 Declare @cmd varchar(8000)
 Declare @DBUserID varchar(128)
 
-Set @DBUserID = 'BO-PASales'
+--Set @DBUserID = 'BO-PASales'
 
 Declare servername cursor for
-Select Distinct servername from sqldbusers 
+--Select Distinct servername, DatabaseUserID from sqldbusers 
+Select Distinct servername, DatabaseUserID from dbusers 
 		WHERE ServerLogin = '** Orphaned **'
 		--AND DatabaseUserID = @DBUserID
+		AND DatabaseUserID NOT IN ('cdc', 'guest', 'INFORMATION_SCHEMA', 'sys')
 	order by ServerName
 
 open servername
-	fetch next from servername into @ServerName
+	fetch next from servername into @ServerName, @DBUserID
 	while @@fetch_status=0
 begin
 
@@ -34,10 +45,11 @@ print('--' + @DBUserID)
 print('--------------------------------------------------------------')
 
 	Declare dbname cursor for
-		select DBName from sqldbusers
+		--select DISTINCT DBName from sqldbusers
+		select DISTINCT DBName from dbusers
 			WHERE ServerLogin = '** Orphaned **'
 			AND servername = @ServerName
-			--AND DatabaseUserID = @DBUserID
+			AND DatabaseUserID = @DBUserID
 		ORDER BY 1
 
 	open dbname
@@ -62,7 +74,7 @@ print('--------------------------------------------------------------')
 	CLOSE dbname
 	DEALLOCATE dbname
 
-fetch next from servername into @ServerName
+fetch next from servername into @ServerName, @DBUserID
 end
 
 CLOSE servername

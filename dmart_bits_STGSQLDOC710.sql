@@ -1,84 +1,82 @@
 USE PA_DMart
 GO
-SELECT  --SourceServer,
+SELECT  
 		Client_ID, SourceDB, [Status], Beta,
 		LoadStageDBStartDate, LoadStageDBEndDate,
-		DATEDIFF(minute,LoadStageDBStartDate, LoadStageDBEndDate) AS StageLoadTime,
+		CONVERT(varchar(12), DATEADD(ms, DATEDIFF(ms, LoadStageDBStartDate, LoadStageDBEndDate), 0), 114) AS StageLoadTime,
 		LoadReportDBStartDate, LoadReportDBEndDate,
-		DATEDIFF(minute,LoadReportDBStartDate, LoadReportDBEndDate) AS ReportLoadTime
+		CONVERT(varchar(12), DATEADD(ms, DATEDIFF(ms, LoadReportDBStartDate, LoadReportDBEndDate), 0), 114) AS ReportLoadTime
 FROM ClientConnection
 --WHERE Beta != '2'
 --WHERE Beta = '1'
 ORDER BY Beta,2
 
---UPDATE ClientConnection
---SET Beta = '0'
---where Client_id IN ('1031') -- PADemoDU
---WHERE SourceDB = 'Thrivent'
+UPDATE ClientConnection
+SET Beta = '2'
+where Client_id IN ('10070', '136', '10055', '10079', '195')
+WHERE SourceDB IN ('PADemoDU')
+-- Dupont, PATrain, PADemoDU, RLC
 -------------------------------------------
---UPDATE ClientConnection
---SET Beta = '1'
---WHERE SourceDB IN ('AddisonAve32','Chevron','Boeing4','Ent','GeorgiaTelco','HiwayCU','PADemoDU')
---WHERE Client_ID <= 1025 -- Hutchinson, number 30 when sorted by client_id
-
---UPDATE ClientConnection
---SET Beta = '0'
---WHERE Client_ID = '9999999' --> 1025
 -------------------------------------------
 /*
-DECLARE @1DayAgo datetime
-SET @1DayAgo = GetDate() - 2 
+DECLARE @3AM datetime
+SET @3AM = (SELECT CAST(CAST(GETDATE() AS DATE) AS VARCHAR(12)) + ' 03:00:00.000') --GetDate() -- 2 
 
 UPDATE ClientConnection
-SET LoadStageDBStartDate = @1DayAgo
-,LoadStageDBEndDate = @1DayAgo
-,LoadReportDBStartDate = @1DayAgo
-,LoadReportDBEndDate = @1DayAgo
+SET LoadStageDBStartDate = @3AM
+,LoadStageDBEndDate = @3AM
+,LoadReportDBStartDate = @3AM
+,LoadReportDBEndDate = @3AM
 ,Status = 4
+where Client_ID = 1031
 WHERE Beta='1'
 */
 ----------------------------------------------
 /*
 TRUNCATE TABLE DMartLogging
 */
+----------------------------------------------
 SELECT * FROM DMartLogging
 --WHERE DATEPART(day,ErrorDateTime) = DATEPART(day,GetDate())
 --AND DATEPART(month,ErrorDateTime) = DATEPART(month,GetDate())
+--AND DATEPART(year,ErrorDateTime) = DATEPART(year,GetDate())
+ORDER BY ErrorDateTime DESC
+----------------------------------------------
+SELECT * FROM DMartLogging
+WHERE DATEPART(day,ErrorDateTime) = DATEPART(day,GetDate())
+AND DATEPART(month,ErrorDateTime) = DATEPART(month,GetDate())
+AND DATEPART(year,ErrorDateTime) = DATEPART(year,GetDate())
 ORDER BY ErrorDateTime desc
 ----------------------------------------------
-SELECT name from sys.databases
-WHERE Name LIKE '%Stage%'
+SELECT * FROM dbo.DMartComponentLogging
+WHERE DATEPART(day,ErrorDateTime) = DATEPART(day,GetDate())
+AND DATEPART(month,ErrorDateTime) = DATEPART(month,GetDate())
+AND DATEPART(year,ErrorDateTime) = DATEPART(year,GetDate())
+--AND TaskName = 'Data Flow Task br_liability'
+GROUP BY TaskName, ErrorDateTime, PackageName, DestDB, DestServer, SourceDB, SourceServer, ID, ClientId, ErrorMessage
+ORDER BY ErrorDateTime DESC
 ----------------------------------------------
-SELECT name from sys.databases
-WHERE Name LIKE '%Data%'
+DECLARE @ReportDate DATETIME
+
+SELECT @ReportDate = GETDATE() - 3;
+
+EXEC sel_DMartComponentLogByClient --@ReportDate
+EXEC sel_DMartComponentLogByTaskName --@ReportDate
 ----------------------------------------------
-EXEC sel_dmart_clients @Beta = '1'
+--SELECT name from sys.databases
+--WHERE Name LIKE '%Stage%'
+----------------------------------------------
+--SELECT name from sys.databases
+--WHERE Name LIKE '%Data%'
+----------------------------------------------
+--EXEC sel_dmart_clients @Beta = '1'
 ----------------------------------------------
 SELECT * FROM opsinfo.ops.dbo.clients
-WHERE client_name IN ('thrivent')
+WHERE client_name LIKE ('%XCeed%')
 ----------------------------------------------
-ins_ClientConnection @Client_id = '10073'
-					, @SourceServer = 'STGSQL610'
-					, @SourceDB = 'Thrivent'
-
-dbamaint.dbo.dbm_DMartDRRecovery 'Thrivent'
---client_id	client_name	client_pa
---1013	GeorgiaTelco	1
---10069	CommunityFirstCU	1
---10070	FinancialPrtCU	1
---10071	CitizensFirst	1
-
---STGSQL511	CommunityFirstCU
---STGSQL610	GeorgiaTelco
---STGSQL511	FinancialPrtCU
---STGSQL610	CitizensFirst
-
-
-
---@Client_id				int,
---@SourceServer			varchar(50),
---@SourceDB				varchar(50)
---ins_ClientConnection '10028','STGSQL511','DenverPublicSchools'
+ins_ClientConnection @Client_id = '10081'
+					, @SourceServer = 'STGSQL615'
+					, @SourceDB = 'XceedFinancialCU'
 ----------------------------------------------
 /*
 UPDATE ClientConnection
@@ -89,21 +87,6 @@ SET LoadStageDBStartDate = '2010-03-09 01:10:33.200'
 ,Status = 4
 WHERE Beta='1'
 */
-
---SELECT * FROM ClientConnection
-----DELETE FROM ClientConnection
---WHERE SourceDB = 'FirstTech'
-
-
---UPDATE ClientConnection
---SET Status = 4, LoadReportDBEndDate = '2010-04-09 05:45:01.887'
---WHERE Client_ID = 198
---SET StageServer = ''
-
---DELETE FROM ClientConnection
---WHERE Client_ID = '999999'
-
-
 ----------------------------------------------------------------
 USE PA_DMart
 GO
@@ -154,30 +137,15 @@ ORDER BY Beta,3 --DESC
 --WHERE Beta='0'
 ----------------------------------------------------------------
 
----------------------------------------------
---update clientconnection set StageServer = 'STGSQLDOC710', ReportServer = 'STGSQLDOC710', SourceServer = 'STGSQL511'
---where SourceDB IN ('AddisonAve32','Chevron','EDCO','ConstructionLoanCompany','Delta','Dupont','Kern32','MembersMortgage','Suncoast32','Wescom')
---WHERE Beta = '0'
 
---UPDATE ClientConnection
---SET LoadStageDBStartDate = '2010-03-09 01:10:33.200'
---,LoadStageDBEndDate = '2010-03-09 01:15:20.393'
---,LoadReportDBStartDate = '2010-03-09 02:55:12.807'
---,LoadReportDBEndDate = '2010-03-09 02:59:33.627'
---where Beta = '0'
-
-
---UPDATE ClientConnection
---SET LoadStageDBStartDate = '2010-03-09 01:10:33.200'
---,LoadStageDBEndDate = '2010-03-09 01:15:20.393'
---,LoadReportDBStartDate = '2010-03-09 02:55:12.807'
---,LoadReportDBEndDate = '2010-03-09 02:59:33.627'
---,Status = '0'
---where Beta = '0'
-
-
---UPDATE ClientConnection
---SET Beta = '0'
---SET Client_ID = '228'
---WHERE SourceDB = 'Boeing4'
+DELETE FROM ClientConnection
+WHERE SourceDB IN ('AddisonAve32'
+					, 'Chevron'
+					, 'Ent'
+					, 'CommunityFirstCU'
+					, 'CUWest'
+					, 'GeorgiaTelco'
+					, 'CitizensFirst'
+					, 'LGECCU'
+					)
 

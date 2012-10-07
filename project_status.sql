@@ -1,3 +1,6 @@
+USE Status
+GO
+
 SELECT [PDID]
       ,[PSID]
       ,[TechID]
@@ -11,13 +14,13 @@ SELECT [PDID]
 GO
 
 update [Status].[dbo].[ProjectDetail]
-set pdlastupdate = '2011-04-20 17:32:00'
-where pdlastupdate = '2011-04-24 19:21:00'
+set pdlastupdate = '2011-11-11 11:08:00'
+where pdlastupdate = '2011-11-14 11:26:00'
 
 --5849	2533	4	Migrated to Prod.	30	0	2010-11-15 20:43:00
 update [Status].[dbo].[ProjectDetail]
-SET HoursWorked = '2', MinutesWorked = '0'
-WHERE PDID = '8670' AND PSID = '1729'
+SET HoursWorked = '3', MinutesWorked = '0'
+WHERE PDID = '14854' AND PSID = '1697'
 
 SELECT [PSID]
       ,[TechID]

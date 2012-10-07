@@ -29,15 +29,17 @@ ORDER BY
 -------------------------------------------------------------------------------------------
 --Most Recent Database Backup for Each Database - Detailed
 -------------------------------------------------------------------------------------------    
-SELECT 
-   A.[Server], 
-   A.database_name, 
-   B.backup_start_date, 
-   --B.expiration_date,
-   B.backup_size--, 
-   --B.logical_device_name, 
-   --B.physical_device_name,  
-   --B.backupset_name
+SELECT
+	A.[Server]
+	, A.database_name
+	, B.backup_start_date
+	, B.backup_finish_date
+	, CONVERT(varchar(12), DATEADD(ms, DATEDIFF(ms, B.backup_start_date, B.backup_finish_date), 0), 114) AS BackupTime
+	, B.backup_size
+	--, B.expiration_date
+	--, B.logical_device_name
+	--, B.physical_device_name
+	--, B.backupset_name
 FROM
    (
    SELECT  
@@ -71,7 +73,7 @@ WHERE  msdb..backupset.type = 'D'
    ) AS B
    ON A.[server] = B.[server] AND A.[database_name] = B.[database_name] AND A.[last_db_backup_date] = B.[backup_finish_date]
 ORDER BY 
-   A.database_name
+   backup_finish_date
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 --------------------------------------------------------------------------------- 

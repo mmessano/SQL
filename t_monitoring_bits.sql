@@ -109,16 +109,16 @@ update t_monitoring set sched_tasks = '0'
 	(select server_id from t_server where server_name IN ('PDOC10'))
 update t_monitoring set drm = '1' 
 	where server_id IN 
-	(select server_id from t_server where server_name IN ('PSQLSVC21'))
+	(select server_id from t_server where server_name IN ('PSQLRPT24'))
 ----------------------------------------------------------------------------------------
 -- cleanup t_monitoring
 -- select * from t_monitoring
 ----------------------------------------------------------------------------------------
 DELETE FROM t_monitoring WHERE server_id IN (
-select DISTINCT m.server_id
-from	dbo.t_server s  RIGHT OUTER JOIN
-	dbo.t_monitoring m ON s.server_id = m.server_id
-WHERE s.active = '0')
+	select DISTINCT m.server_id
+	from	dbo.t_server s  
+			RIGHT OUTER JOIN dbo.t_monitoring m ON s.server_id = m.server_id
+	WHERE s.active = '0')
 -------------------------------------------------------------------------------------------------
 DELETE FROM t_monitoring where server_id IN (
 	SELECT server_id from t_server where server_name = 'EWEBPROD1')
@@ -190,20 +190,27 @@ where server_id IN(select server_id from t_server where server_name like ('ISQLD
 Declare @server_id int
 Declare @server_name varchar(64)
 
-Set @server_name = 'STGSQL512'
+Set @server_name = 'PAPP15'
 
 Set @server_id = (select server_id from t_server where server_name = @server_name)
 BEGIN
 	if  exists ( select * from t_monitoring where server_id = @server_id ) 
 		BEGIN
 			print 'Exists in t_monitoring ' + @server_name 
-			update t_monitoring set dsn = '1', dcom = '1', sched_tasks = '1' where server_id = @server_id --IN (select server_id from t_server where server_name IN ( @server_name))
+			update t_monitoring 
+			set dsn = '1'
+				, dcom = '1'
+				, sched_tasks = '1' 
+			where server_id = @server_id --IN (select server_id from t_server where server_name IN ( @server_name))
 		END
 	else
 		BEGIN
 			print 'Adding ' + @server_name + ' to the t_monitoring table' + char(13)
 			insert into t_monitoring (server_id,LastUpdate) values (@server_id,GetDate())
-			update t_monitoring set dsn = '1', dcom = '1', sched_tasks = '1'
+			update t_monitoring 
+			set dsn = '1'
+				, dcom = '1'
+				, sched_tasks = '1'
 			where server_id = @server_id --IN (select server_id from t_server where server_name IN ( @server_name))
 		END
 END

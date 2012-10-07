@@ -24,7 +24,7 @@ EXEC dbamaint.dbo.dbm_ListFiles @IISConn,'##IISConn','%.rrd','NULL',0
 -------------------------------------------------------------------------------
 -- send CPU mail
 -------------------------------------------------------------------------------
-EXEC msdb.dbo.sp_send_dbmail @recipients='mmessano@dexma.com',
+EXEC msdb.dbo.sp_send_dbmail @recipients='mmessano@primealliancesolutions.com',
     @subject = 'Servers needing CPU RRD',
     @query =	'select s.server_name AS ServerName--, c.MyFile AS CPURRD 
 				from	status.dbo.t_server s	LEFT OUTER join 
@@ -38,7 +38,7 @@ EXEC msdb.dbo.sp_send_dbmail @recipients='mmessano@dexma.com',
 -------------------------------------------------------------------------------
 -- send Memory mail
 -------------------------------------------------------------------------------
-EXEC msdb.dbo.sp_send_dbmail @recipients='mmessano@dexma.com',
+EXEC msdb.dbo.sp_send_dbmail @recipients='mmessano@primealliancesolutions.com',
     @subject = 'Servers needing Memory RRD',
     @query =	'select s.server_name AS ServerName
 				from	status.dbo.t_server s	LEFT OUTER join 
@@ -52,7 +52,7 @@ EXEC msdb.dbo.sp_send_dbmail @recipients='mmessano@dexma.com',
 -------------------------------------------------------------------------------
 -- send IISConn mail
 -------------------------------------------------------------------------------
-EXEC msdb.dbo.sp_send_dbmail @recipients='mmessano@dexma.com',
+EXEC msdb.dbo.sp_send_dbmail @recipients='mmessano@primealliancesolutions.com',
     @subject = 'Servers needing IISConn RRD',
     @query =	'select s.server_name AS ServerName
 				from	status.dbo.t_server s	LEFT OUTER join 

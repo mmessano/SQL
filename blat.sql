@@ -14,7 +14,7 @@ Begin
 	select @BLATPATH = '\\newton\dexma\bin\thirdparty\blat.exe '
 	select @BODY1 = '- -body '
 	select @BODY2 = '" SQL Job(s) have failed on " + @@servername'
-	select @RECIP = ' -t mmessano@dexma.com '
+	select @RECIP = ' -t mmessano@primealliancesolutions.com '
 	select @SUBJ = '-subject "SQL Job Failures." '
 	select @NOTIFYSTATE = @BLATPATH + @BODY1 + @rowcount + @BODY2 + @@servername + @RECIP + @SUBJ
 	exec master..xp_cmdshell @NOTIFYSTATE

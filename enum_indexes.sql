@@ -45,11 +45,11 @@ declare db_cursor cursor forward_only for
 	FROM 	master..sysdatabases
 	WHERE 	name NOT IN ('northwind', 'pubs')
 	AND 	(status & 32) <> 32  	   --loading.
-	AND	(status & 64) <> 64 	   --pre recovery.
-	AND	(status & 128) <> 128      --recovering.
-	AND	(status & 256) <> 256      --not recovered.
-	AND	(status & 512) <> 512 	   --Offline
-	AND	(status & 32768) <> 32768  --emergency mode.
+	AND		(status & 64) <> 64 	   --pre recovery.
+	AND		(status & 128) <> 128      --recovering.
+	AND		(status & 256) <> 256      --not recovered.
+	AND		(status & 512) <> 512 	   --Offline
+	AND		(status & 32768) <> 32768  --emergency mode.
 	AND 	DbID > 4
 
 open db_cursor

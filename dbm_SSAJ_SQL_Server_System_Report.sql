@@ -60,7 +60,7 @@ DECLARE @vBody AS NVARCHAR (MAX)
 DECLARE @vSQL_String AS NVARCHAR (MAX)
 
 
-SET @vRecipients = 'mmessano@dexma.com'
+SET @vRecipients = 'mmessano@primealliancesolutions.com'
 SET @vCopy_Recipients = NULL
 SET @vUnused_Index_Uptime_Threshold = 7
 

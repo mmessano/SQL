@@ -8,7 +8,7 @@
 
 
 DECLARE @DatabaseUserName [sysname]
-SET @DatabaseUserName = 'user_name_goes_here'
+SET @DatabaseUserName = 'home_office\dexprosql'
 
 SET NOCOUNT ON
 DECLARE

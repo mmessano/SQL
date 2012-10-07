@@ -1,3 +1,32 @@
+-- remove duplicates from SQLErrorLogs table
+alter table SQLIndexRebuilds
+  add seq_num int identity
+go
+--delete from a
+select *-- from a
+from SQLIndexRebuilds a join
+     (select ServerName
+			, DBName
+			, SQLStatement
+			, IndexType
+			, FragPercent
+			, max(seq_num) AS max_seq_num 
+		from SQLIndexRebuilds
+		group by ServerName, DBName, SQLStatement, IndexType, FragPercent
+		having count(*) > 1) b
+      on a.ServerName = b.ServerName and
+         a.DBName = b.DBName and
+         a.SQLStatement = b.SQLStatement and
+         a.IndexType = b.IndexType and
+         a.FragPercent = b.FragPercent and
+         a.seq_num < b.max_seq_num
+go 
+alter table SQLIndexRebuilds
+ drop column seq_num
+--------------------------------------------------------------------------
+SELECT * FROM SQLIndexRebuilds
+ORDER BY LastUpdate DESC
+--------------------------------------------------------------------------
 SELECT 'dbcc showcontig (' +
 CONVERT(varchar(20),i.id) + ',' + -- table id
 CONVERT(varchar(20),i.indid) + ') -- ' + -- index id
@@ -14,7 +43,6 @@ ORDER BY
 object_name(i.id), i.indid 
 
 --------------------------------------------------------------------------
-
 --Script to identify table fragmentation
 
 --Declare variables
@@ -98,3 +126,11 @@ where sys.dm_db_index_usage_stats.database_id =DB_ID()
     and sys.dm_db_index_usage_stats.index_id NOT IN(0,1)
 ORDER BY OBJECT_NAME(sys.indexes.object_id),
     sys.indexes.name
+    
+    
+    
+SELECT * FROM SQLIndexRebuilds
+ORDER BY TimesRebuilt DESC
+
+
+ 

@@ -12,8 +12,8 @@ FROM ClientConnection
 ORDER BY Beta,2
 
 --UPDATE ClientConnection
---SET Beta = '1'
---WHERE SourceDB IN ('PADemoDU','RLC','TIB')
+--SET Beta = '2'
+--WHERE SourceDB IN ('PADemoDU','RLC','PremierAmerica')
 -------------------------------------------
 --UPDATE ClientConnection
 --SET Beta = '0'
@@ -51,11 +51,11 @@ WHERE Name LIKE '%Data%'
 EXEC sel_dmart_clients @Beta = '1'
 ----------------------------------------------
 SELECT * FROM opsinfo.ops.dbo.clients
-WHERE client_name LIKE '%HiwayCU%'
+WHERE client_name LIKE '%Merrimack%'
 ----------------------------------------------
-ins_ClientConnection @Client_id = '10073'
-					, @SourceServer = 'PSQLDLS33'
-					, @SourceDB = 'Thrivent'
+ins_ClientConnection @Client_id = '10055'
+					, @SourceServer = 'PSQLDLS35'
+					, @SourceDB = 'Merrimack'
 					
 dbamaint.dbo.dbm_DMartDRRecovery 'Thrivent'
 ----------------------------------------------
@@ -70,13 +70,13 @@ DECLARE @NOW datetime
 SET @NOW = GetDate()
 
 UPDATE ClientConnection
-SET LoadStageDBStartDate = '2010-08-27 01:30:05.943'
-,LoadStageDBEndDate = '2010-08-27 01:30:05.943'
-,LoadReportDBStartDate = '2010-08-27 01:30:05.943'
-,LoadReportDBEndDate = '2010-08-27 01:30:05.943'
+SET LoadStageDBStartDate = '2011-07-23 04:16:06.803'
+,LoadStageDBEndDate = @NOW
+,LoadReportDBStartDate = @NOW
+,LoadReportDBEndDate = @NOW
 ,Status = 4
---where client_id = '141'
-WHERE Beta='1'
+where client_id = '309'
+--WHERE Beta='1'
 */
 ----------------------------------------------------------------
 USE PA_DMart
@@ -111,19 +111,6 @@ FROM ClientConnection
 ORDER BY Beta,3 --DESC
 ----------------
 
---DECLARE @1DayAgo datetime
---SET @1DayAgo = GetDate() - 1 
-
---UPDATE ClientConnection
---SET LoadStageDBStartDate = @1DayAgo
---,LoadStageDBEndDate = @1DayAgo
---,LoadReportDBStartDate = @1DayAgo
---,LoadReportDBEndDate = @1DayAgo
---,Status = 4
---WHERE Beta='1'
-----------------------------------------------------------------
-
-
 --UPDATE ClientConnection
 --SET Status = '0' 
 --where Client_ID = '1037'
@@ -142,19 +129,6 @@ ORDER BY Beta,3 --DESC
 --WHERE ReportServer = 'PSLQRPT22'
 
 ---------------------------------------------
---update clientconnection set StageServer = 'PSQLRPT22'
---where SourceDB IN ('AddisonAve32','Chevron','EDCO','ConstructionLoanCompany','Delta','Dupont','Kern32','MembersMortgage','Suncoast32','Wescom')
---WHERE Beta = '0'
-
---UPDATE ClientConnection
---SET LoadStageDBStartDate = '2010-03-09 01:10:33.200'
---,LoadStageDBEndDate = '2010-03-09 01:15:20.393'
---,LoadReportDBStartDate = '2010-03-09 02:55:12.807'
---,LoadReportDBEndDate = '2010-03-09 02:59:33.627'
---where Beta = '0'
-
-
-
 --UPDATE ClientConnection
 --SET StageServer = 'PSQLRPT22', ReportServer = 'PSQLRPT22', Beta = '0'
 --WHERE SourceDB = 'Redwood'
@@ -163,28 +137,24 @@ ORDER BY Beta,3 --DESC
 --SET SourceServer = 'PSQLDLS30'
 --WHERE SourceDB = 'HiwayCU'
 
-
---UPDATE ClientConnection
---SET LoadStageDBStartDate = '2010-03-09 01:10:33.200'
---,LoadStageDBEndDate = '2010-03-09 01:15:20.393'
---,LoadReportDBStartDate = '2010-03-09 02:55:12.807'
---,LoadReportDBEndDate = '2010-03-09 02:59:33.627'
---,Status = '0'
---where Beta = '0'
-
-
 --UPDATE ClientConnection
 --SET Beta = '1'
 --SET Client_ID = '228'
 --WHERE SourceDB = 'RLC'
 
 
---UPDATE ClientConnection
---SET LoadStageDBStartDate = GetDate()
---,LoadStageDBEndDate = GetDate()
---,LoadReportDBStartDate = GetDate()
---,LoadReportDBEndDate = GetDate()
---WHERE Beta = '1'
 
-DELETE FROM ClientConnection
-WHERE SourceDB = 'MidwestFinancial'
+SELECT SUM(StageLoadTime) AS TotalStageLoadTime, SUM(ReportLoadTime) AS TotalReportLoadTime
+FROM
+(
+SELECT  --SourceServer,
+		Client_ID, SourceDB, [Status], Beta,
+		LoadStageDBStartDate, LoadStageDBEndDate,
+		DATEDIFF(minute,LoadStageDBStartDate, LoadStageDBEndDate) AS StageLoadTime,
+		LoadReportDBStartDate, LoadReportDBEndDate,
+		DATEDIFF(minute,LoadReportDBStartDate, LoadReportDBEndDate) AS ReportLoadTime
+FROM ClientConnection
+--WHERE Beta != '2'
+--WHERE Beta = '1'
+--ORDER BY Beta,2
+) t

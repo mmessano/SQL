@@ -13,7 +13,7 @@ WHILE @@fetch_status = 0
 
 BEGIN
 
-SELECT @cmd = 'C:\Dexma\powershell_bits\Compare-DMartSchema2.ps1 -SqlServerOne ' + @@SERVERNAME + ' -FirstDatabase DMart_Template_Data -SqlServerTwo ' + @@SERVERNAME + ' -DatabaseList "DMart_ABECU_Data, DMart_Addison_Data, DMart_AmericaFirst_Data, DMart_AmericanAirlines_Data" -Column -Log'
+SELECT @cmd = 'E:\Dexma\powershell_bits\Compare-DMartSchema2.ps1 -SqlServerOne ' + @@SERVERNAME + ' -FirstDatabase DMart_Template_Data -SqlServerTwo ' + @@SERVERNAME + ' -DatabaseList "DMart_ABECU_Data, DMart_Addison_Data, DMart_AmericaFirst_Data, DMart_AmericanAirlines_Data" -Column -Log'
 
 PRINT (@cmd)
 
@@ -53,11 +53,11 @@ SELECT @dblistStage = COALESCE(@dblistStage + ', ', '') +	name
 				AND name NOT LIKE '%Template%'
 				GROUP BY name
 
-SELECT @cmd2 = 'C:\Dexma\powershell_bits\Compare-DMartSchema2.ps1 -SqlServerOne ' + 
+SELECT @cmd2 = 'E:\Dexma\powershell_bits\Compare-DMartSchema2.ps1 -SqlServerOne ' + 
 				@@SERVERNAME + ' -FirstDatabase DMart_Template_Data -SqlServerTwo ' + 
 				@@SERVERNAME + ' -DatabaseList ' + @dblistData + ' -Column -Log'
 
-SELECT @cmd3 = 'C:\Dexma\powershell_bits\Compare-DMartSchema2.ps1 -SqlServerOne ' + 
+SELECT @cmd3 = 'E:\Dexma\powershell_bits\Compare-DMartSchema2.ps1 -SqlServerOne ' + 
 				@@SERVERNAME + ' -FirstDatabase DMart_Template_Stage -SqlServerTwo ' + 
 				@@SERVERNAME + ' -DatabaseList ' + @dblistStage + ' -Column -Log'
 
@@ -83,7 +83,7 @@ ORDER BY server_name
 
 --print @ServerList
 
-SELECT @cmd =	'C:\Dexma\powershell_bits\Compare-DbamaintSchema.ps1 ' +
+SELECT @cmd =	'E:\Dexma\powershell_bits\Compare-DbamaintSchema.ps1 ' +
 				'-ServerList ' + @ServerList + ' -Column -Log'
 				
 PRINT (@cmd)				
@@ -139,12 +139,12 @@ SELECT @dblistStage = COALESCE(@dblistStage + ', ', '') +	name
 				AND name NOT LIKE '%Test%'
 				GROUP BY name
 
-SELECT @cmd2 = 'C:\Dexma\powershell_bits\Compare-DMartSchema2.ps1 -SqlServerOne ' + 
+SELECT @cmd2 = 'E:\Dexma\powershell_bits\Compare-DMartSchema2.ps1 -SqlServerOne ' + 
 				@@SERVERNAME + ' -FirstDatabase RLCSMC -SqlServerTwo ' + 
 				@@SERVERNAME + ' -DatabaseList ' + @dblistData + ' -Column -Log'
 
 -- use the Dev current version
-SELECT @cmd3 = 'C:\Dexma\powershell_bits\Compare-DMartSchema2.ps1 -SqlServerOne ' + 
+SELECT @cmd3 = 'E:\Dexma\powershell_bits\Compare-DMartSchema2.ps1 -SqlServerOne ' + 
 				'ISQLDEV610 -FirstDatabase SMCCurrent -SqlServerTwo ' + 
 				@@SERVERNAME + ' -DatabaseList ' + @dblistStage + ' -Column -Log'
 
