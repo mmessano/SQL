@@ -39,13 +39,19 @@ GO
 
 
 
-SELECT [PID]
-      ,[PTicketNumber]
-      ,[PTicketTitle]
-      ,[PTargetDate]
-      ,[PLastUpdate]
-      ,[PActive]
-  FROM [Status].[dbo].[Project]
-  order by [PLastUpdate] desc
+SELECT [PDID]
+      ,pd.[PSID]
+      ,ps.PSTitle
+      ,pd.[TechID]
+      ,[PDComment]
+      ,[HoursWorked]
+      ,[MinutesWorked]
+      ,[PDLastUpdate]
+FROM [Status].[dbo].[ProjectDetail] pd
+	INNER JOIN [Status].[dbo].[ProjectStatus] ps ON pd.PSID = ps.PSID
+where pd.TechID = '4'
+	AND DATEPART(MONTH, PDLastUpdate) IN ('1', '2', '3')
+	AND DATEPART(YEAR, PDLastUpdate) = '2013'
+order by pdlastupdate asc
 GO
 

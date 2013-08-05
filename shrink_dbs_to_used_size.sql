@@ -109,7 +109,7 @@ begin
     --PRINT @Databasename
     SELECT @DataSQLString = 'USE [' + @DBName + ']; DBCC SHRINKFILE (N''' + @DataLogicalName + ''',' + @DFUsedSpace + ');' + CHAR(9)
     SELECT @LogSQLString = 'USE [' + @DBName + ']; DBCC SHRINKFILE (N''' + @LogLogicalName + ''',200);' + CHAR(9)
-    --PRINT @DataSQLString
+    PRINT @DataSQLString
     PRINT @LogSQLString
     end
     fetch curSize into @DBName, @DataLogicalName, @LogLogicalName, @DFUsedSpace, @LFUsedSpace

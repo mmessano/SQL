@@ -19,7 +19,7 @@ DECLARE @DBS TABLE (
 INSERT INTO @DBS
 	SELECT DISTINCT DBName FROM SQLIndicesMissing
 	WHERE DBName NOT LIKE '%_rpt'
-	AND DBName NOT LIKE 'DMart%'
+	AND DBName  LIKE 'DMart%CDC%'
 	AND DBName NOT LIKE '%Management'
 	AND DBName NOT LIKE '%Workflow'
 	AND DBName NOT IN ('DX_PA', 'DXPRD', 'CMS', 'Journyx', 'RightFax', 'RightFax', 'SQLDataCollection', 'Performance')
@@ -35,6 +35,7 @@ SELECT @CreateIndexStatement = 'CREATE NONCLUSTERED INDEX ix_IndexName ON AFT ( 
 
 SELECT @DynamicPivotQuery = 
 N'SELECT CreateIndexStatement
+	--, DBName
 	, TableName
 	--, DBCount
 	--, SUM(Impact) AS TotalClients
@@ -43,7 +44,7 @@ N'SELECT CreateIndexStatement
 		SELECT DISTINCT CreateIndexStatement
 			, DBName
 			, TableName
-			, CAST(SUM(Impact) AS INT) AS Impact
+			, CAST(SUM(Impact) AS BIGINT) AS Impact
 			, COUNT(DBName) AS DBCount
 		FROM SQLIndicesMissing 
 		WHERE DBName IN (''' + @DBList2 + ''')

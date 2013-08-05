@@ -1,3 +1,4 @@
+SET NOCOUNT ON
 DECLARE @Number int,
 	@LoopID int,
 	@SQLString varchar(8000)
@@ -12,7 +13,7 @@ BEGIN
 	SELECT @SQLString = 'DBCC SHRINKDATABASE ([' + DatabaseName + '],4)' FROM #tempDatabases WHERE Number = @LoopID
 	PRINT(@SQLString)
 	--EXEC (@SQLString)
-	--SELECT (@SQLString)
+	SELECT (@SQLString)
 	SELECT @LoopID = @LoopID + 1
 END
 drop table #tempDatabases

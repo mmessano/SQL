@@ -35,7 +35,7 @@ WHERE SalCal_UniqueID = 1
 
 SELECT @EmployeeList
 */
-
+-- old package
 DECLARE @dblistStage NVARCHAR(MAX)
 DECLARE @dblistData NVARCHAR(MAX)
 DECLARE @cmd2 VARCHAR(MAX)
@@ -63,6 +63,22 @@ SELECT @cmd3 = 'E:\Dexma\powershell_bits\Compare-DMartSchema2.ps1 -SqlServerOne 
 
 PRINT (@cmd2)
 PRINT (@cmd3)
+------------------------------------------------------------------------------------------------------------------------
+-- CDC package
+DECLARE @CDCData NVARCHAR(MAX)
+DECLARE @CDCcmd VARCHAR(MAX)
+
+SELECT @CDCData = COALESCE(@CDCData + ', ', '') +	name 
+				FROM sys.databases
+				WHERE name LIKE 'DMart%CDC%Data'
+				AND name NOT LIKE '%Template%'
+				GROUP BY name
+
+SELECT @CDCcmd = 'E:\Dexma\powershell_bits\Compare-DMartSchema2.ps1 -SqlServerOne ' + 
+				@@SERVERNAME + ' -FirstDatabase DMart_TemplateCDC_Data -SqlServerTwo ' + 
+				@@SERVERNAME + ' -DatabaseList ' + @CDCData + ' -Column -Log'
+
+PRINT (@CDCcmd)
 ------------------------------------------------------------------------------------------------------------------------
 -- XSQLUTIL18.dbo.Status
 USE Status
